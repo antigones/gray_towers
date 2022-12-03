@@ -1,37 +1,23 @@
 import copy
 
+from gray_tower import GrayTower
 
-class GrayBucharest:
+
+class GrayBucharest(GrayTower):
 
     def __init__(self, n_rigs, n_disks):
-        self.n_rigs = n_rigs
-        self.n_disks = n_disks
-        self.rigs = self.populate_rigs()
-        self.ternary_gray_sequence = [[0, 0, 0], [0, 0, 1], [0, 0, 2],
-                                      [0, 1, 2], [0, 1, 1], [0, 1, 0],
-                                      [0, 2, 0], [0, 2, 1], [0, 2, 2],
-                                      [1, 2, 2], [1, 2, 1], [1, 2, 0],
-                                      [1, 1, 0], [1, 1, 1], [1, 1, 2],
-                                      [1, 0, 2], [1, 0, 1], [1, 0, 0],
-                                      [2, 0, 0], [2, 0, 1], [2, 0, 2],
-                                      [2, 1, 2], [2, 1, 1], [2, 1, 0],
-                                      [2, 2, 0], [2, 2, 1], [2, 2, 2]]
-
-    def move_disk(self, disk_to_move, current_rig_idx, next_rig_idx):
-        """Move the disk from the current ring to the next one."""
-        if current_rig_idx != next_rig_idx:
-            self.rigs[current_rig_idx] = self.rigs[current_rig_idx][:-1]
-            self.rigs[next_rig_idx].append(disk_to_move)
-
-    def check_objective(self):
-        """Check if game ended."""
-        return self.rigs == [[], [], list(range(self.n_disks-1, -1, -1))]
-
-    def populate_rigs(self):
-        """Populate rigs with disks."""
-        rigs = [[] for x in range(self.n_rigs)]
-        rigs[0] = list(range(self.n_disks-1, -1, -1))
-        return rigs
+        super().__init__(n_rigs, n_disks)
+        self.ternary_gray_sequence = [
+            [0, 0, 0], [0, 0, 1], [0, 0, 2],
+            [0, 1, 2], [0, 1, 1], [0, 1, 0],
+            [0, 2, 0], [0, 2, 1], [0, 2, 2],
+            [1, 2, 2], [1, 2, 1], [1, 2, 0],
+            [1, 1, 0], [1, 1, 1], [1, 1, 2],
+            [1, 0, 2], [1, 0, 1], [1, 0, 0],
+            [2, 0, 0], [2, 0, 1], [2, 0, 2],
+            [2, 1, 2], [2, 1, 1], [2, 1, 0],
+            [2, 2, 0], [2, 2, 1], [2, 2, 2]
+        ]
 
     def solve(self):
         """Find the moves to solve the puzzle."""
