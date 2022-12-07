@@ -1,3 +1,6 @@
+import copy
+
+
 class GrayTower:
     def __init__(self, n_rigs, n_disks):
         self.n_rigs = n_rigs
@@ -36,3 +39,56 @@ class GrayTower:
         rigs = [[] for x in range(self.n_rigs)]
         rigs[0] = list(range(self.n_disks-1, -1, -1))
         return rigs
+
+    def pretty_print(self, configurations):
+        out_str = "\n"
+        for configuration in configurations:
+            print_rigs = copy.deepcopy(configuration)
+            for rig in print_rigs:
+                padding = [self.n_disks]*(self.n_disks-len(rig))
+                rig.extend(padding)
+            smallest_disk_width = 3
+            disk_widths = [
+                x+smallest_disk_width for x in list(range(0, self.n_disks*2, 2))]
+            base_width = disk_widths[-1] + 2
+            disks_repr = [((base_width-x)//2)*' '+'0' * x +
+                          ((base_width-x)//2)*' ' for x in disk_widths]
+            rig_repr = [' '*(base_width//2)+"|"+' '*(base_width//2)]
+            pretty_disks = disks_repr + rig_repr
+            rig_str = list()
+            for rig in print_rigs:
+                rig_str.append([pretty_disks[a] for a in rig])
+            for i in range(self.n_disks-1, -1, -1):
+                for j in range(self.n_rigs):
+                    out_str += rig_str[j][i]
+                out_str += '\n'
+            out_str += '='*(base_width*self.n_rigs)
+            out_str += '\n'
+            out_str += '\n'
+        print(out_str)
+
+    def pretty_print_configuration(self, configuration):
+        out_str = "\n"
+        print_rigs = copy.deepcopy(configuration)
+        for rig in print_rigs:
+            padding = [self.n_disks]*(self.n_disks-len(rig))
+            rig.extend(padding)
+        smallest_disk_width = 3
+        disk_widths = [
+            x+smallest_disk_width for x in list(range(0, self.n_disks*2, 2))]
+        base_width = disk_widths[-1] + 2
+        disks_repr = [((base_width-x)//2)*' '+'0' * x +
+                      ((base_width-x)//2)*' ' for x in disk_widths]
+        rig_repr = [' '*(base_width//2)+"|"+' '*(base_width//2)]
+        pretty_disks = disks_repr + rig_repr
+        rig_str = list()
+        for rig in print_rigs:
+            rig_str.append([pretty_disks[a] for a in rig])
+        for i in range(self.n_disks-1, -1, -1):
+            for j in range(self.n_rigs):
+                out_str += rig_str[j][i]
+            out_str += '\n'
+        out_str += '='*(base_width*self.n_rigs)
+        out_str += '\n'
+        out_str += '\n'
+        return out_str

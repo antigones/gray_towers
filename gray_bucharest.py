@@ -19,7 +19,7 @@ class GrayBucharest(GrayTower):
             [2, 2, 0], [2, 2, 1], [2, 2, 2]
         ]
 
-    def solve(self):
+    def solve(self, verbose=False):
         """Find the moves to solve the puzzle."""
 
         configurations = [copy.deepcopy(self.rigs)]
@@ -41,4 +41,6 @@ class GrayBucharest(GrayTower):
             last_rigs[2] = small_disk_next_rig
             configurations.append(copy.deepcopy(self.rigs))
             i += 1
+        if verbose:
+            self.pretty_print(configurations)
         return configurations

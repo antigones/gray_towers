@@ -5,7 +5,7 @@ from gray_bucharest import GrayBucharest
 def main():
 
     gray_hanoi = GrayHanoi(n_rigs=3, n_disks=3)
-    configurations = gray_hanoi.solve()
+    configurations = gray_hanoi.solve(verbose=True)
 
     for configuration in configurations:
         print(configuration)

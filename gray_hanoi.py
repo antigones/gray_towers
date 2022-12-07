@@ -22,7 +22,7 @@ class GrayHanoi(GrayTower):
     def dec2gray(self, n):
         return n ^ (n >> 1)
 
-    def solve(self):
+    def solve(self, verbose=False):
         """Find the moves to solve the puzzle."""
         configurations = [copy.deepcopy(self.rigs)]
         small_disk_move = 0
@@ -42,7 +42,10 @@ class GrayHanoi(GrayTower):
 
             current_rig_idx = self.find_rig(disk_to_move)
             self.move_disk(disk_to_move, current_rig_idx, next_rig_idx)
+
             configurations.append(copy.deepcopy(self.rigs))
             last = i
             i += 1
+        if verbose:
+            self.pretty_print(configurations)
         return configurations
