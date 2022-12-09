@@ -1,14 +1,28 @@
 import random as rd
+
+configurations = [
+    [[2, 1], [], []],
+    [[2], [1], []],
+    [[2], [0], [1]],
+    [[0], [1], [2]],
+    [[0], [2], [1]],
+    [[0], [0], [2, 1]],
+    [[1], [0], [2]],
+    [[1], [2], [0]],
+    [[0], [2, 1], [0]],
+]
+
+
 r = [
-    [-1, 0, 0, -1, -1, -1, -1, -1, -1],
-    [0, -1, 0, 0, -1, -1, -1, -1, -1],
-    [0, 0, -1, -1, 0, -1, -1, -1, -1],
-    [-1, 0, -1, -1, -1, 100, 0, -1, -1],
-    [-1, -1, 0, -1, -1, -1, -1, 0, 0],
-    [-1, -1, -1, 0, -1, -1, 0, -1, -1],
-    [-1, -1, -1, 0, -1, 100, -1, -1, -1],
-    [-1, -1, -1, -1, 0, -1, -1, -1, 0],
-    [-1, -1, -1, -1, 0, -1, -1, 0, 100],
+    [-1, 0, 0, -1, -1, -1, -1, -1, -1],  # 0
+    [0, -1, 0, 0, -1, -1, -1, -1, -1],  # 1
+    [0, 0, -1, -1, 0, -1, -1, -1, -1],  # 2
+    [-1, 0, -1, -1, -1, 100, 0, -1, -1],  # 3
+    [-1, -1, 0, -1, -1, -1, -1, 0, 0],  # 4
+    [-1, -1, -1, 0, -1, -1, 0, -1, -1],  # 5
+    [-1, -1, -1, 0, -1, 100, -1, 0, -1],  # 6
+    [-1, -1, -1, -1, 0, -1, 0, -1, 0],  # 7
+    [-1, -1, -1, -1, 0, -1, -1, 0, 0],  # 8
 ]
 
 q = [
@@ -39,12 +53,12 @@ possible_initial_states = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 explored_initial_states = set()
 episode = 1
 GAMMA = 0.8
-goal_state = 5
+GOAL_STATE = 5
 while len(possible_initial_states) - len(explored_initial_states) > 0:
     initial_state_for_this_episode = rd.choice(possible_initial_states)
     explored_initial_states.add(initial_state_for_this_episode)
     print('*** EPISODE '+str(episode)+' ***')
-    while initial_state_for_this_episode != goal_state:
+    while initial_state_for_this_episode != GOAL_STATE:
         # choose a possible initial state for this episode
         initial_state_for_this_episode = rd.choice(possible_initial_states)
 
@@ -77,3 +91,15 @@ while len(possible_initial_states) - len(explored_initial_states) > 0:
         initial_state_for_this_episode = next_state
     # possible_initial_states.remove(initial_state_for_this_episode)
     episode += 1
+
+print("*** TRAIN ENDED ***")
+next_state = 0
+print(configurations[next_state])
+c = 0
+while next_state != GOAL_STATE and c < 10:
+    edges = q[next_state]
+    (m, i) = max((v, i) for i, v in enumerate(edges))
+    print(i)
+    print(configurations[i])
+    next_state = i
+    c += 1
