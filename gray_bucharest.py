@@ -7,6 +7,7 @@ class GrayBucharest(GrayTower):
 
     def __init__(self, n_rigs, n_disks):
         super().__init__(n_rigs, n_disks)
+        """
         self.ternary_gray_sequence = [
             [0, 0, 0], [0, 0, 1], [0, 0, 2],
             [0, 1, 2], [0, 1, 1], [0, 1, 0],
@@ -18,6 +19,8 @@ class GrayBucharest(GrayTower):
             [2, 1, 2], [2, 1, 1], [2, 1, 0],
             [2, 2, 0], [2, 2, 1], [2, 2, 2]
         ]
+        """
+        self.ternary_gray_sequence = self.generate_m_ary_gray_code(3)
 
     def solve(self, verbose=False):
         """Find the moves to solve the puzzle."""

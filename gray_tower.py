@@ -43,23 +43,20 @@ class GrayTower:
 
     def generate_m_ary_gray_code(self, m):
         base = list(range(m))
-        print(base)
-
         desc = list(range(m-1, -1, -1))
         asc = list(range(0, m))
 
-        for k in range(m-1):
+        for _ in range(m-1):
             p = []
             for i, b in enumerate(base):
                 if i % 2 == 0:
-                    # p += list(itertools.product([b], asc))
                     for a in asc:
                         p += [str(b)+str(a)]
                 else:
                     for d in desc:
                         p += [str(b)+str(d)]
             base = p
-        p = [list(map(int, list(x))) for x in p]
+        p = [[int(n) for n in x] for x in p]
         return p
 
     def pretty_print(self, configurations):
