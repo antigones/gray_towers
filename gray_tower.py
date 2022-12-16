@@ -42,6 +42,7 @@ class GrayTower:
         return rigs
 
     def generate_m_ary_gray_code(self, m):
+        """Generate m-ary Gray code."""
         base = list(range(m))
         desc = list(range(m-1, -1, -1))
         asc = list(range(0, m))
@@ -60,6 +61,7 @@ class GrayTower:
         return p
 
     def pretty_print(self, configurations):
+        """Pretty-print the solution configurations in a nice ascii-art form."""
         out_str = "\n"
         for configuration in configurations:
             print_rigs = copy.deepcopy(configuration)
@@ -87,6 +89,7 @@ class GrayTower:
         print(out_str)
 
     def pretty_print_configuration(self, configuration):
+        """Pretty-print a specific configuration in a nice ascii-art form."""
         out_str = "\n"
         print_rigs = copy.deepcopy(configuration)
         for rig in print_rigs:

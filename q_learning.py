@@ -37,6 +37,7 @@ q = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
+"""
 states = {
     0: [1, 2],
     1: [0, 2, 3],
@@ -48,6 +49,7 @@ states = {
     7: [4, 8],
     8: [4, 7],
 }
+"""
 
 possible_initial_states = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 explored_initial_states = set()
@@ -92,14 +94,13 @@ while len(possible_initial_states) - len(explored_initial_states) > 0:
     # possible_initial_states.remove(initial_state_for_this_episode)
     episode += 1
 
-print("*** TRAIN ENDED ***")
 next_state = 0
 print(configurations[next_state])
 c = 0
 while next_state != GOAL_STATE and c < 10:
     edges = q[next_state]
     (m, i) = max((v, i) for i, v in enumerate(edges))
-    print(i)
+    # print(i)
     print(configurations[i])
     next_state = i
     c += 1
