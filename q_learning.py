@@ -57,12 +57,14 @@ episode = 1
 GAMMA = 0.8
 GOAL_STATE = 5
 while len(possible_initial_states) - len(explored_initial_states) > 0:
+    # choose a possible initial state for this episode
     initial_state_for_this_episode = rd.choice(possible_initial_states)
     explored_initial_states.add(initial_state_for_this_episode)
+
     print('*** EPISODE '+str(episode)+' ***')
     while initial_state_for_this_episode != GOAL_STATE:
-        # choose a possible initial state for this episode
-        initial_state_for_this_episode = rd.choice(possible_initial_states)
+
+        #initial_state_for_this_episode = rd.choice(possible_initial_states)
 
         print('** INITIAL STATE FOR EPISODE '+str(episode))
         print(initial_state_for_this_episode)
