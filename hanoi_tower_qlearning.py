@@ -1,16 +1,19 @@
 import copy
 import random as rd
 import math
+import numpy as np
 
 
 class HanoiTowerQLearning:
 
-    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8):
+    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8, alpha=0.1, max_episodes=50000):
         self.start_state = start_state
         self.goal_state = goal_state
         self.gamma = gamma
+        self.alpha = alpha
         self.n_rigs = n_rigs
         self.n_disks = n_disks
+        self.max_episodes = max_episodes
 
     def get_next_allowed_moves(self, starting_state):
         next_moves = []
@@ -70,7 +73,7 @@ class HanoiTowerQLearning:
                     if str(next_state) not in index_dict.keys():
                         space_dict[c] = next_state
                         index_dict[str(next_state)] = c
-                        # compile reward matrix (R)
+                        # fill reward matrix (R)
                         c += 1
 
         for start_state in index_dict.keys():
@@ -92,53 +95,51 @@ class HanoiTowerQLearning:
 
         space_dict, index_dict, r, q = self.generate_qr(
             self.start_state)
-
-        print(space_dict)
-
-        possible_initial_states = set(range(len(space_dict)))
-        explored_initial_states = set()
+        possible_initial_states = list(range(len(space_dict)))
         episode = 1
         GAMMA = self.gamma
         GOAL_STATE = index_dict[str(self.goal_state)]
+        ALPHA = self.alpha
+        MAX_EPISODES = self.max_episodes
+        q_prec = copy.deepcopy(q)
 
-        verbose_str = ""
+        done = False
+        convergence_count = 0
 
-        while len(possible_initial_states) - len(explored_initial_states) > 0:
-            net_initial_states = possible_initial_states - explored_initial_states
-            # initial_state_for_this_episode = rd.choice(possible_initial_states)
+        while episode < MAX_EPISODES and not done:
             initial_state_for_this_episode = rd.choice(
-                list(net_initial_states))
-            print('*** NET INITIAL STATES ***')
-            print(len(net_initial_states))
-            explored_initial_states.add(initial_state_for_this_episode)
+                possible_initial_states)
             print('*** EPISODE '+str(episode)+' ***')
             while initial_state_for_this_episode != GOAL_STATE:
-                # choose a possible initial state for this episode
-                # initial_state_for_this_episode = rd.choice(
-                #    list(possible_initial_states))
-
-                #print('** INITIAL STATE FOR EPISODE '+str(episode))
-                # print(initial_state_for_this_episode)
-                #print('*** CHOICES FOR THIS STATE***')
                 possible_choices_for_this_state = r[initial_state_for_this_episode]
-                # print(possible_choices_for_this_state)
                 candidate_next_states = []
                 for i in range(len(possible_choices_for_this_state)):
                     if possible_choices_for_this_state[i] != -math.inf:
                         candidate_next_states.append(i)
-                #print('*** CANDIDATE NEXT STATES ***')
-                # print(candidate_next_states)
                 next_state = rd.choice(candidate_next_states)
-                #print('*** NEXT STATE ***')
-                # print(next_state)
-                # print(r[initial_state_for_this_episode][next_state])
-                # print(q[next_state])
-                q[initial_state_for_this_episode][next_state] = r[initial_state_for_this_episode][next_state] + \
+                # naive way to update
+                # q[initial_state_for_this_episode][next_state] = r[initial_state_for_this_episode][next_state] + \
+                #    GAMMA * max(q[next_state])
+
+                ## another way to update ##
+                q_target = r[initial_state_for_this_episode][next_state] + \
                     GAMMA * max(q[next_state])
-                #print('*** UPDATED Q ***')
-                # print(q)
+                q_delta = q_target - \
+                    q[initial_state_for_this_episode][next_state]
+                q[initial_state_for_this_episode][next_state] = q[initial_state_for_this_episode][next_state] + \
+                    ALPHA*(q_delta)
+                ## end of another way to update ##
                 initial_state_for_this_episode = next_state
-            # possible_initial_states.remove(initial_state_for_this_episode)
+
+            if np.allclose(q, q_prec) and sum(sum(x) for x in q):
+                if convergence_count > 100:
+                    done = True
+                    break
+                else:
+                    convergence_count += 1
+            else:
+                q_prec = copy.deepcopy(q)
+                convergence_count = 0
             episode += 1
 
         next_state = 0
@@ -149,3 +150,4 @@ class HanoiTowerQLearning:
             (m, i) = max((v, i) for i, v in enumerate(edges))
             print(space_dict[i])
             next_state = i
+            c += 1
