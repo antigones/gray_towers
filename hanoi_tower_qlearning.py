@@ -6,7 +6,7 @@ import numpy as np
 
 class HanoiTowerQLearning:
 
-    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8, alpha=0.1, max_episodes=50000):
+    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8, alpha=0.1, epsilon=0.5, max_episodes=50000):
         self.start_state = start_state
         self.goal_state = goal_state
         self.gamma = gamma
@@ -14,6 +14,7 @@ class HanoiTowerQLearning:
         self.n_rigs = n_rigs
         self.n_disks = n_disks
         self.max_episodes = max_episodes
+        self.epsilon = epsilon
 
     def get_next_allowed_moves(self, starting_state):
         next_moves = []
@@ -84,7 +85,7 @@ class HanoiTowerQLearning:
                 if next_state == self.goal_state:
                     r_matrix[start_state_index][next_state_index] = 100
                 else:
-                    r_matrix[start_state_index][next_state_index] = 0
+                    r_matrix[start_state_index][next_state_index] = 0.1
 
         # loopback for goal state
         goal_state_index = index_dict[str(self.goal_state)]
@@ -106,6 +107,12 @@ class HanoiTowerQLearning:
         done = False
         convergence_count = 0
 
+        min_epsilon = 0.01
+        max_epsilon = 1.0
+        decay_rate = 0.01
+        self.epsilon = min_epsilon + \
+            (max_epsilon - min_epsilon) * np.exp(-decay_rate * episode)
+
         while episode < MAX_EPISODES and not done:
             initial_state_for_this_episode = rd.choice(
                 possible_initial_states)
@@ -116,7 +123,16 @@ class HanoiTowerQLearning:
                 for i in range(len(possible_choices_for_this_state)):
                     if possible_choices_for_this_state[i] != -math.inf:
                         candidate_next_states.append(i)
-                next_state = rd.choice(candidate_next_states)
+
+                # print(initial_state_for_this_episode)
+                # print(candidate_next_states)
+
+                r = rd.uniform(0, 1)
+                if r < self.epsilon:
+                    next_state = rd.choice(candidate_next_states)
+                else:
+                    next_state = np.argmax(r[initial_state_for_this_episode])
+
                 # naive way to update
                 # q[initial_state_for_this_episode][next_state] = r[initial_state_for_this_episode][next_state] + \
                 #    GAMMA * max(q[next_state])
@@ -131,8 +147,10 @@ class HanoiTowerQLearning:
                 ## end of another way to update ##
                 initial_state_for_this_episode = next_state
 
-            if np.allclose(q, q_prec) and sum(sum(x) for x in q):
-                if convergence_count > 100:
+            if np.allclose(q, q_prec) and sum(sum(x) for x in q) > 0:
+                if convergence_count > int(10):
+                    print('CONVERGE!')
+
                     done = True
                     break
                 else:
@@ -140,6 +158,11 @@ class HanoiTowerQLearning:
             else:
                 q_prec = copy.deepcopy(q)
                 convergence_count = 0
+
+            # epsilon update
+
+            self.epsilon = min_epsilon + \
+                (max_epsilon - min_epsilon) * np.exp(-decay_rate * episode)
             episode += 1
 
         next_state = 0
