@@ -85,7 +85,7 @@ class HanoiTowerQLearning:
                 if next_state == self.goal_state:
                     r_matrix[start_state_index][next_state_index] = 100
                 else:
-                    r_matrix[start_state_index][next_state_index] = 0.1
+                    r_matrix[start_state_index][next_state_index] = -1
 
         # loopback for goal state
         goal_state_index = index_dict[str(self.goal_state)]
@@ -124,11 +124,11 @@ class HanoiTowerQLearning:
                     if possible_choices_for_this_state[i] != -math.inf:
                         candidate_next_states.append(i)
 
-                # print(initial_state_for_this_episode)
-                # print(candidate_next_states)
+                print(initial_state_for_this_episode)
+                print(candidate_next_states)
 
-                r = rd.uniform(0, 1)
-                if r < self.epsilon:
+                e = rd.uniform(0, 1)
+                if e < self.epsilon:
                     next_state = rd.choice(candidate_next_states)
                 else:
                     next_state = np.argmax(r[initial_state_for_this_episode])
