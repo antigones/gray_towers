@@ -46,21 +46,8 @@ class HanoiTowerQLearning:
     def get_reward(self, state):
         if state == self.goal_state:
             return 100
+
         return 0
-
-    def find_in_qsa(self, q_s_a, key):
-        res = []
-        for k in q_s_a.keys():
-            if k.startswith(key+"|"):
-                res.append(k)
-        return res
-
-    def find_val_in_qsa(self, q_s_a, key):
-        res = []
-        for k in q_s_a.keys():
-            if k.startswith(key+"|"):
-                res.append(q_s_a[k])
-        return res
 
     def train(self, verbose=False):
 
@@ -90,7 +77,7 @@ class HanoiTowerQLearning:
                 for next_state in possible_next_states_for_this_state:
                     rewards_for_actions[str(next_state)
                                         ] = self.get_reward(next_state)
-                    possible_initial_states.add(str(next_state))
+                    # possible_initial_states.add(str(next_state))
 
                 # e = rd.uniform(0, 1)
                 # if e < self.epsilon:
@@ -109,12 +96,12 @@ class HanoiTowerQLearning:
                 else:
                     m_q_s1 = 0
 
-                q_s_a[initial_state_for_this_episode+"|" +
-                      chosen_next_state] = rewards_for_actions[chosen_next_state] + GAMMA * m_q_s1
+                q_s_a[initial_state_for_this_episode + "|" +
+                      chosen_next_state] = rewards_for_actions[chosen_next_state] + (GAMMA * m_q_s1)
                 initial_state_for_this_episode = chosen_next_state
 
             if q_s_a == q_s_a_prec:
-                if convergence_count > int(1000):
+                if convergence_count > int(100):
                     print('** CONVERGED **')
                     done = True
                     break
@@ -131,7 +118,7 @@ class HanoiTowerQLearning:
                 np.exp(-self.decay_rate * episode)
             episode += 1
 
-        # print(q_s_a)
+        print(q_s_a)
 
         c = 0
         print(self.start_state)
