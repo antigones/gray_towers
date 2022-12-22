@@ -7,11 +7,10 @@ from collections import defaultdict
 
 class HanoiTowerQLearning:
 
-    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8, alpha=0.1, epsilon=0.5, max_episodes=50000):
+    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8,  epsilon=0.5, max_episodes=50000):
         self.start_state = start_state
         self.goal_state = goal_state
         self.gamma = gamma
-        self.alpha = alpha
         self.n_rigs = n_rigs
         self.n_disks = n_disks
         self.max_episodes = max_episodes
@@ -44,22 +43,9 @@ class HanoiTowerQLearning:
                             next_moves.append(copied_rigs)
         return next_moves
 
-    def get_reward(self, state, visited):
-        # print('** VISITED **')
-        # print(state)
-        # print(visited)
-        # well_placed_disks = len(state[-1])
-        # wrong_placed_disks = self.n_disks - well_placed_disks
-        # print(well_placed_disks)
-        # print(wrong_placed_disks)
+    def get_reward(self, state):
         if state == self.goal_state:
             return 100
-
-        # if str(state) in visited:
-            # print('VIS')
-        #    return -500
-
-        # return 3*(well_placed_disks-wrong_placed_disks)
         return 0
 
     def find_in_qsa(self, q_s_a, key):
@@ -83,10 +69,7 @@ class HanoiTowerQLearning:
 
         GAMMA = self.gamma
         GOAL_STATE = self.goal_state
-        ALPHA = self.alpha
         MAX_EPISODES = self.max_episodes
-        # q = [[0]*self.total_nr_of_state for _ in range(self.total_nr_of_state)]
-        # q_prec = copy.deepcopy(q)
 
         done = False
         convergence_count = 0
@@ -95,25 +78,18 @@ class HanoiTowerQLearning:
         episode = 1
         # rd.seed(42)
         while episode < MAX_EPISODES and not done:
-            visited = []
             initial_state_for_this_episode = rd.choice(
                 list(possible_initial_states))
 
             print('*** EPISODE '+str(episode)+' ***')
-            # print('*** POSSIBLE INITIAL STATES FOR THIS EPISODE ***')
-            # print(len(possible_initial_states))
             while eval(initial_state_for_this_episode) != GOAL_STATE:
-                # print(initial_state_for_this_episode)
                 possible_next_states_for_this_state = self.get_next_allowed_moves(
                     eval(initial_state_for_this_episode))
-                # print(possible_next_states_for_this_state)
                 rewards_for_actions = {}
-                #q_s1_a = []
+
                 for next_state in possible_next_states_for_this_state:
                     rewards_for_actions[str(next_state)
-                                        ] = self.get_reward(next_state, visited)
-                    # q_s1_a.append(
-                    #    q_s_a[initial_state_for_this_episode+"|"+str(next_state)])
+                                        ] = self.get_reward(next_state)
                     possible_initial_states.add(str(next_state))
 
                 # e = rd.uniform(0, 1)
@@ -124,7 +100,7 @@ class HanoiTowerQLearning:
                 # m = max(
                 #        q_s_list, key=q_s_list.get)
                 #    chosen_next_state = m.split("|")[1]
-                visited.append(chosen_next_state)
+
                 q_s1_list = {x: q_s_a[x] for x in q_s_a.keys() if x.startswith(
                     chosen_next_state+"|")}
 
@@ -135,15 +111,11 @@ class HanoiTowerQLearning:
 
                 q_s_a[initial_state_for_this_episode+"|" +
                       chosen_next_state] = rewards_for_actions[chosen_next_state] + GAMMA * m_q_s1
-
-                # print('**QSA**')
-                # print(q_s_a)
                 initial_state_for_this_episode = chosen_next_state
 
             if q_s_a == q_s_a_prec:
                 if convergence_count > int(1000):
                     print('** CONVERGED **')
-
                     done = True
                     break
                 else:
@@ -159,9 +131,10 @@ class HanoiTowerQLearning:
                 np.exp(-self.decay_rate * episode)
             episode += 1
 
-        print(q_s_a)
+        # print(q_s_a)
 
         c = 0
+        print(self.start_state)
         next_state = str(self.start_state)
         while next_state != str(self.goal_state):
             candidate_next_list = {x: q_s_a[x] for x in q_s_a.keys() if x.startswith(
