@@ -7,7 +7,7 @@ from collections import defaultdict
 
 class HanoiTowerQLearning:
 
-    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8,  epsilon=0.5, max_episodes=50000):
+    def __init__(self, start_state, goal_state, n_rigs, n_disks, gamma=0.8, max_episodes=50000):
         self.start_state = start_state
         self.goal_state = goal_state
         self.gamma = gamma
@@ -46,7 +46,6 @@ class HanoiTowerQLearning:
     def get_reward(self, state):
         if state == self.goal_state:
             return 100
-
         return 0
 
     def train(self, verbose=False):
