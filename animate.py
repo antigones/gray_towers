@@ -1,5 +1,6 @@
 import urwid
 from gray_hanoi import GrayHanoi
+from gray_bucharest import GrayBucharest
 
 frame = 0
 
@@ -15,10 +16,11 @@ def refresh(_loop, _data):
 
     txt.set_text(outputTxt)
     _data += 1
-    loop.set_alarm_in(0.2, refresh, _data)
+    loop.set_alarm_in(0.5, refresh, _data)
 
 
-gray_hanoi = GrayHanoi(n_rigs=3, n_disks=8)
+# gray_hanoi = GrayHanoi(n_pegs=3, n_disks=5)
+gray_hanoi = GrayBucharest(n_pegs=3, n_disks=3)
 configurations = gray_hanoi.solve(verbose=False)
 
 outputTxt = gray_hanoi.pretty_print_configuration(

@@ -6,12 +6,12 @@ from gray_tower import GrayTower
 
 class GrayHanoi(GrayTower):
 
-    def __init__(self, n_rigs, n_disks):
-        super().__init__(n_rigs, n_disks)
-        self.small_disk_rig_seq = self.calc_small_disc_rig_seq()
+    def __init__(self, n_pegs, n_disks):
+        super().__init__(n_pegs, n_disks)
+        self.small_disk_peg_seq = self.calc_small_disc_peg_seq()
 
-    def calc_small_disc_rig_seq(self):
-        """Calculate how small disk should move along the rigs."""
+    def calc_small_disc_peg_seq(self):
+        """Calculate how small disk should move along the pegs."""
         # those starts from index 2
         if self.n_disks % 2 == 1:
 
@@ -24,7 +24,7 @@ class GrayHanoi(GrayTower):
 
     def solve(self, verbose=False):
         """Find the moves to solve the puzzle."""
-        configurations = [copy.deepcopy(self.rigs)]
+        configurations = [copy.deepcopy(self.pegs)]
         small_disk_move = 0
         last = 0
         i = 1
@@ -35,15 +35,15 @@ class GrayHanoi(GrayTower):
             disk_to_move = int(math.log(which_position_changed, 2))
 
             if disk_to_move == 0:
-                next_rig_idx = self.small_disk_rig_seq[small_disk_move % 3]
+                next_peg_idx = self.small_disk_peg_seq[small_disk_move % 3]
                 small_disk_move += 1
             else:
-                next_rig_idx = self.find_allowed(disk_to_move)
+                next_peg_idx = self.find_allowed(disk_to_move)
 
-            current_rig_idx = self.find_rig(disk_to_move)
-            self.move_disk(disk_to_move, current_rig_idx, next_rig_idx)
+            current_peg_idx = self.find_peg(disk_to_move)
+            self.move_disk(disk_to_move, current_peg_idx, next_peg_idx)
 
-            configurations.append(copy.deepcopy(self.rigs))
+            configurations.append(copy.deepcopy(self.pegs))
             last = i
             i += 1
         if verbose:
