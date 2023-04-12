@@ -31,19 +31,15 @@ class GrayBucharest(GrayTower):
         # while not self.check_objective():
         for i in range(len(self.ternary_gray_sequence)):
             ternary_gray_code = self.ternary_gray_sequence[i]
-            small_disk_next_peg = ternary_gray_code[2]
-            medium_disk_next_peg = ternary_gray_code[1]
-            bigger_disk_next_peg = ternary_gray_code[0]
 
-            self.move_disk(0, last_pegs[2], small_disk_next_peg)
-            self.move_disk(1, last_pegs[1], medium_disk_next_peg)
-            self.move_disk(2, last_pegs[0], bigger_disk_next_peg)
+            self.move_disk(0, last_pegs[2], ternary_gray_code[2])
+            self.move_disk(1, last_pegs[1], ternary_gray_code[1])
+            self.move_disk(2, last_pegs[0], ternary_gray_code[0])
 
-            last_pegs[0] = bigger_disk_next_peg
-            last_pegs[1] = medium_disk_next_peg
-            last_pegs[2] = small_disk_next_peg
+            last_pegs[0] = ternary_gray_code[0]
+            last_pegs[1] = ternary_gray_code[1]
+            last_pegs[2] = ternary_gray_code[2]
             configurations.append(copy.deepcopy(self.pegs))
-            i += 1
         if verbose:
             self.pretty_print(configurations)
         return configurations
