@@ -36,15 +36,14 @@ class GrayTower:
 
     def populate_pegs(self):
         """Populate pegs with disks."""
-        pegs = [[] for _ in range(self.n_pegs)]
-        pegs[0] = list(range(self.n_disks-1, -1, -1))
+        pegs = [list(range(self.n_disks-1, -1, -1)), [], []]
         return pegs
 
     def generate_m_ary_gray_code(self, m):
         """Generate m-ary Gray code."""
         base = list(range(m))
         desc = list(range(m-1, -1, -1))
-        asc = list(range(m))
+        asc = list(range( m))
 
         for _ in range(m-1):
             p = []
@@ -56,7 +55,6 @@ class GrayTower:
                     for d in desc:
                         p += [str(b)+str(d)]
             base = p
-        print(base)
         p = [[int(n) for n in x] for x in p]
         return p
 
