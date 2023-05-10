@@ -36,7 +36,8 @@ class GrayTower:
 
     def populate_pegs(self):
         """Populate pegs with disks."""
-        pegs = [list(range(self.n_disks-1, -1, -1)), [], []]
+        pegs = [[] for _ in range(self.n_pegs)]
+        pegs[0] = list(range(self.n_disks-1, -1, -1))
         return pegs
 
     def generate_m_ary_gray_code(self, m):
@@ -73,7 +74,7 @@ class GrayTower:
             disks_repr = [((base_width-x)//2)*' '+'0' * x +
                           ((base_width-x)//2)*' ' for x in disk_widths]
             peg_repr = [' '*(base_width//2)+"|"+' '*(base_width//2)]
-            pretty_disks = disks_repr + peg_repr
+            pretty_disks = disks_repr + peg_repr + peg_repr
             peg_str = list()
             for peg in print_pegs:
                 peg_str.append([pretty_disks[a] for a in peg])
