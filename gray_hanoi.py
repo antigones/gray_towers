@@ -13,9 +13,9 @@ class GrayHanoi(GrayTower):
     def calc_small_disc_peg_seq(self):
         """Calculate how small disk should move along the pegs."""
         # those starts from index 2
-        if self.n_disks % 2 == 1:
+        if self.n_disks % 2:
             return [2, 1, 0] # (first, target, remaining) -> target, remaining, first
-        return [1, 2, 0]  #  (first, remaining, target) -> remaining, target, first
+        return [1, 2, 0]  # (first, remaining, target) -> remaining, target, first
 
     def dec2brgray(self, n):
         return n ^ (n >> 1)
