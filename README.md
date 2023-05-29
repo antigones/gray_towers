@@ -204,3 +204,12 @@ For the Tower(s) of Bucharest:
     |        |     0000000
 ===========================
 ```
+
+## References
+
+- https://page.mi.fu-berlin.de/rote/Papers/pdf/Loopless+Gray+code+enumeration+and+the+Tower+of+Bucharest.pdf
+
+- https://puzzles.schwandtner.info/compendium/extras/The%20Linear%20Tower%20of%20Hanoi%20and%20the%20Ternary%20Gray%20Code.pdf
+
+- Machine Learning, Tom Mitchell, McGraw Hill, 1997
+
